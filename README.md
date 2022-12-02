@@ -8,5 +8,5 @@
 python3 main.py --sectors 정보처리 --address 강남구
 
 방법2)<br>
-회사이름을 검색할때 씁니다<br>
+회사이름을 검색할때 씁니다. 특수기호를 쓰면 오류가 나니깐 조심하세요<br>
 python3 main.py --company 긱블
