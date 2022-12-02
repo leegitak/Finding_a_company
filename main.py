@@ -48,14 +48,15 @@ with open('병역지정업체검색_20221201.csv') as file:
     dict_file = DictReader(file)
     for lines in dict_file:
         re_lines = re.search('\S*구', lines['주소'])
-        re_company = re.search(args.company, lines['업체명'])
+        if args.company is not None:
+            re_company = re.search(args.company, lines['업체명'])
+            try:
+                if re_company.group() == args.company:
+                    list_box_insert()
+            except AttributeError:
+                pass
         if lines['업종'] == args.sectors and re_lines.group() == args.address:
             list_box_insert()
-        try:
-            if re_company.group() == args.company:
-                list_box_insert()
-        except AttributeError:
-            pass
 
     list_box.pack()
 
