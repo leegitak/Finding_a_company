@@ -39,25 +39,42 @@ def list_box_insert():
     list_box.insert(END, f'선정년도: {lines["선정년도"]}')
     list_box.insert(END, f'주소: {lines["주소"]}')
     list_box.insert(END, f'업종: {lines["업종"]}')
-    list_box.insert(END, f'전화번호: {lines["전화번호"]}')
     list_box.insert(END, f'기업규모: {lines["기업규모"]}')
     list_box.insert(END, '-------------------------------------')
 
 
-with open('병역지정업체검색_20221201.csv') as file:
+def finding_company(file_lines):
+    try:
+        if args.company is not None:
+            re_company = re.search(args.company, file_lines['업체명'])
+            if re_company.group() == args.company:
+                list_box_insert()
+
+        elif args.sectors is not None and args.address is not None:
+            if file_lines['업종'] == args.sectors and args.address == re_lines.group():
+                list_box_insert()
+
+        elif args.address is not None:
+            if args.address == re_lines.group():
+                list_box_insert()
+        elif args.sectors is not None:
+            if file_lines['업종'] == args.sectors:
+                list_box_insert()
+
+    except AttributeError:
+        pass
+
+
+with open('병역지정업체검색_221205.csv') as file:
     dict_file = DictReader(file)
     for lines in dict_file:
         re_lines = re.search('\S*구', lines['주소'])
-        if args.company is not None:
-            re_company = re.search(args.company, lines['업체명'])
-            try:
-                if re_company.group() == args.company:
-                    list_box_insert()
-            except AttributeError:
-                pass
-        if lines['업종'] == args.sectors and re_lines.group() == args.address:
-            list_box_insert()
+        finding_company(lines)
 
+if list_box.size() >= 1:
+    list_box.pack()
+else:
+    list_box.insert(END, '회사정보가 없습니다.')
     list_box.pack()
 
 window.mainloop()
